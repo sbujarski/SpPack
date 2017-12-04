@@ -1,6 +1,19 @@
-#Prints multiple plots in a grid
+#' Printing Multiple Plots in Grid
+#'
+#' Computes the datapoints in order to plot uncertainty elipses \cr
+#' @name multiplot
+#' @param ... Series of plots
+#' @param cols number of columns (defaults to 1)
+#' @param layout specifiable layout
+#' @keywords plotting
+#' @export
+#' @examples
+#' Data <- data.frame(x1=seq(1:10), y1=runif(10), x2=rnorm(n=10), y2=runif(10))
+#' p1 <- ggplot(Data, aes(x=x1, y=y1)) + geom_point() + SpTheme()
+#' p2 <- ggplot(Data, aes(x=x2, y=y2)) + geom_point() + SpTheme()
+#' multiplot(p1, p2, cols=2)
 
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL) {
 
   # Make a list from the ... arguments and plotlist
   plots <- c(list(...), plotlist)
