@@ -1,9 +1,22 @@
-#Generate Histogram using ggplot2 with overlayed normal distribution
-#Also includes mean and SD
+#' Histogram with ggplot
+#'
+#' Generate Histogram using ggplot2 with overlayed normal distribution. \cr
+#' Also includes mean and SD in the title.
+#' @name SpHist
+#' @param data dataframe or vector of numeric values
+#' @param variable string of the variable of interest
+#' @param bins number of bins (defaults to 30)
+#' @param save boolean of whether to save image
+#'
+#' @keywords descriptives plotting
+#' @export
+#' @examples
+#' SpHist(data=rnorm(100), variable="X Variable", bins=30, save=F)
+
 
 library(ggplot2)
 
-SpHist <- function(data, variable=NA, bins=30, save=F, text.xy)
+SpHist <- function(data, variable=NA, bins=30, save=F)
 {
   if(class(data)=="data.frame"){
     data<-data[variable]
