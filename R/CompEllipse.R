@@ -29,7 +29,6 @@ CompEllipse <- function (x, xsd, y, ysd)
   data.Ellipse$xEll.c <- data.Ellipse$xsd*sin(data.Ellipse$t)
   data.Ellipse$yEll.c <- data.Ellipse$ysd*cos(data.Ellipse$t)
 
-
   #move ellipse points to correct location
   data.Ellipse$xEll <- data.Ellipse$xEll.c + data.Ellipse$x
   data.Ellipse$yEll <- data.Ellipse$yEll.c + data.Ellipse$y
