@@ -51,5 +51,3 @@ multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL) {
   }
 }
 
-#Usage examples
-# multiplot(xqqplot, xsdqqplot, yqqplot, ysdqqplot, cols=2)
