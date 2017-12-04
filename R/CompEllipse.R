@@ -10,11 +10,11 @@
 #' @export data.Ellipse dataframe containing ellipse datapoints
 #' @examples
 #' Data <- data.frame(x=seq(1:10), xsd=runif(10), y=rnorm(n=10), ysd=runif(10))
-#' XY.Ellipse <- CompEllipse(x=XYData$X, xsd=XYData$Xsd, y=XYData$Y, ysd=XYData$Ysd)
+#' Ellipse <- CompEllipse(x=Data$x, xsd=Data$xsd, y=Data$y, ysd=Data$ysd)
 #' p <- ggplot()+
-#'     geom_point(data=XYData, aes(x=X, y=Y))+
-#'     geom_polygon(data=XY.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)
-#'     print(p)
+#'     geom_point(data=Data, aes(x=X, y=Y))+
+#'     geom_polygon(data=Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)
+#' print(p)
 
 
 CompEllipse <- function (x, xsd, y, ysd)
