@@ -1,5 +1,18 @@
-#Function to adjust a monetary value for inflation
-#Works for scalar and vectors
+#' Adjusting for Inflation
+#'
+#' Function to adjust a monetary value for inflation\cr
+#' Works for scalar and vectors
+#' @name InfAdj
+#' @param yr Year raw
+#' @param adj.yr Year to adjust to (e.g. in 2016 dollars)
+#' @param value dollar vallues
+#' @return dataframe adding adjustment factors and inflation adjusted values
+#' @keywords inflation
+#' @export
+#' @examples
+#' InfAdj(yr=1990, adj.yr=2013, value=1)
+#' Dollars <- data.frame(yr=seq(1990,2010), value=1)
+#' InfAdj(yr=Dollars$yr, adj.yr=2013, value=Dollars$value)
 
 InfAdj <- function(yr, adj.yr, value)
 {
@@ -28,10 +41,3 @@ InfAdj <- function(yr, adj.yr, value)
     return(data)
   }
 }
-
-#Usage examples
-# InfAdj(yr=1990, adj.yr=2013, value=1)
-#
-# test with multiple years and values
-# Dollars <- data.frame(yr=seq(1990,2010), value=1)
-# InfAdj(yr=Dollars$yr, adj.yr=2013, value=Dollars$value)
