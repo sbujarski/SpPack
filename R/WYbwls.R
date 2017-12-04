@@ -8,7 +8,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
       print ("Error\nData columns are not of the same length")
       return(NA)
     }
-    
+
     #check to make sure missing data is paired in x and y
     x.NA <- which(is.na(x))
     xsd.NA <- which(is.na(xsd))
@@ -22,7 +22,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
       print ("Error\nMissingness in x is not paired correctly")
       return(NA)
     }
-    
+
     y.NA <- which(is.na(y))
     ysd.NA <- which(is.na(ysd))
     if(!(length(y.NA)==length(ysd.NA)))
@@ -36,29 +36,29 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
       return(NA)
     }
   }
-  
+
   #OLS correlation
   r<-cor(x,y)
   n<-length(x)
-  
+
   OLSLM <- lm(y~x)
   if(print)
   {
     print("OLS Regression Results")
     print(summary(OLSLM))
   }
-  
-  
+
+
   #Weighting Errors
   wx<-abs(1/(xsd^2))
   wy<-abs(1/(ysd^2))
   alpha <- sqrt(wx*wy)
-  
+
   b <- OLSLM$coefficients["x"]
   d <- tol
   i <- 0
   ri <- 0
-  
+
   #York et al. (2004) Algorithm
   if(print){print(noquote("Williamson-York Iterative Algorithm"))}
   while (d > tol || d == tol) #Tolerance check loop
@@ -84,7 +84,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
                   r=NA, r2=NA, p=NA, plot=NA))
     }
   }
-  
+
   U2 <- U^2
   V2 <- V^2
   a <- meany - b*meanx
@@ -97,13 +97,13 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
   siga <- sqrt(sigasq)
   S <- sum(W*((Y - b*x - a))^2)
   wr = sum(U*V)/sqrt((sum(U2)*sum(V2)))
-  
+
   #MLE p-value
   B <- 0
   t<-(b-B)/sigb
   Pval<-2*pt(-abs(t),df=n-2)
-  
-  
+
+
   #print WY Results
   WY.Summary<- c("\n", "Williamson-York Algorithm for Bivariate Weighted Least Squared", "\n", "\n",
                  "Coefficients:","\n",
@@ -112,13 +112,13 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
                  "Slope","\t",round(b, digits=4),"\t",round(sigb, digits=3),"\n\n",
                  "r:  ","\t",round(wr,digits=4),"\n",
                  "r^2:","\t",round(wr^2,digits=4),"\n",
-                 "p:  ","\t",Pval, "\n\n") 
+                 "p:  ","\t",Pval, "\n\n")
   if(print)
   {
     cat(WY.Summary)
   }
-  
-  
+
+
   #Generate Figure (if requested)
   Fig<-NULL
   if(plot)
@@ -129,7 +129,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
     WYline<-data.frame(x=c(min(x),max(x)))
     WYline$WY.y<-a+b*WYline$x
     Data.Ellipse <- CompEllipse(x=xydata$x, xsd=xydata$xsd, y=xydata$y, ysd=xydata$ysd)
-    
+
     Fig <- ggplot()+
       geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
       scale_size_continuous(range = c(2,7))+
@@ -140,17 +140,18 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
       SpTheme() + theme(legend.position = c(0.8,0.15), legend.key.width=unit(2,"line"))
     print(Fig)
   }
-  
+
   return(list(WY.Summary=WY.Summary, OLSLM=OLSLM,
               WY.Int=a,WY.Int.SE=siga,
               WY.Slope=b, WY.Slope.SE=sigb,
               r=wr, r2=wr^2, p=Pval, plot=Fig))
 }
 
-X <- c(7.042, 2.419, 3.371, 2.394, 3.633, 3.904, 2.915, 7.676, 3.338, 2.440, 3.073, 2.651, 4.593, 4.734, 6.614, 5.403, 6.529, 6.576, 8.415, 3.306)
-Xsd<-c(1.660, 1.296, 1.283, 0.403, 1.686, 0.793, 1.019, 0.376, 1.792, 1.215, 1.030, 0.706, 1.314, 0.246, 0.590, 1.697, 0.425, 0.708, 0.417, 0.957)
-Y <- c(5.393, 3.793, 5.055, 2.769, 9.481, 3.704, 0.408, 6.143, 3.754, 6.163, 1.012, 4.447, 4.465, 4.769, 5.623, 5.255, 9.506, 3.071, 5.640, 2.837)
-Ysd<-c(0.618, 1.523, 1.045, 0.208, 1.812, 1.774, 1.508, 1.599, 0.641, 0.723, 0.230, 0.774, 1.585, 0.369, 0.372, 1.087, 0.518, 1.122, 0.786, 1.184)
-XYData<-data.frame(X=X,Xsd=Xsd,Y=Y,Ysd=Ysd)
-
-WYtest <- WYbwls(x=XYData$X, xsd=XYData$Xsd, y=XYData$Y, ysd=XYData$Ysd, print=T, plot=T)
+#Usage examples
+# X <- c(7.042, 2.419, 3.371, 2.394, 3.633, 3.904, 2.915, 7.676, 3.338, 2.440, 3.073, 2.651, 4.593, 4.734, 6.614, 5.403, 6.529, 6.576, 8.415, 3.306)
+# Xsd<-c(1.660, 1.296, 1.283, 0.403, 1.686, 0.793, 1.019, 0.376, 1.792, 1.215, 1.030, 0.706, 1.314, 0.246, 0.590, 1.697, 0.425, 0.708, 0.417, 0.957)
+# Y <- c(5.393, 3.793, 5.055, 2.769, 9.481, 3.704, 0.408, 6.143, 3.754, 6.163, 1.012, 4.447, 4.465, 4.769, 5.623, 5.255, 9.506, 3.071, 5.640, 2.837)
+# Ysd<-c(0.618, 1.523, 1.045, 0.208, 1.812, 1.774, 1.508, 1.599, 0.641, 0.723, 0.230, 0.774, 1.585, 0.369, 0.372, 1.087, 0.518, 1.122, 0.786, 1.184)
+# XYData<-data.frame(X=X,Xsd=Xsd,Y=Y,Ysd=Ysd)
+#
+# WYtest <- WYbwls(x=XYData$X, xsd=XYData$Xsd, y=XYData$Y, ysd=XYData$Ysd, print=T, plot=T)
