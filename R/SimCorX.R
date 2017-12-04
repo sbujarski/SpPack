@@ -1,10 +1,7 @@
 #' Simulating Correlated Y for Given X
 #'
 #' Simulates bivariate correlation of specified n, means, sd, and rho
-#' @name SimCor
-#' @param n number of datapoints to simulate
-#' @param xmean mean of x variable
-#' @param xsd standard deviation of x variable
+#' @name SimCorX
 #' @param ymean mean of y variable
 #' @param ysd standard deviation of y variable
 #' @param rho intended correlation
@@ -12,7 +9,7 @@
 #' @keywords simulation
 #' @export
 #' @examples
-#' SimCor(n=20, xmean=10, xsd=5, ymean=1, ysd=.5, rho=.5)
+#' SimCorX(x, Ymean=1, Ysd=.5, rho=.5)
 
 
 SimCorX <- function (x, ymean, ysd, rho)
@@ -28,5 +25,3 @@ SimCorX <- function (x, ymean, ysd, rho)
   return (data.frame(x,x))
 }
 
-#Usage Examples
-# SimCorX(x, Ymean=1, Ysd=.5, rho=.5)
