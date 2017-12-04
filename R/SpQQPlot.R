@@ -9,7 +9,7 @@
 #' @keywords descriptives plotting
 #' @export
 #' @examples
-#' SpHist(data=rnorm(100), variable="X Variable", bins=30, save=F)
+#' SpQQPlot(rnorm(50), varname="Variable #1", save=T)
 
 library(ggplot2)
 
@@ -39,10 +39,3 @@ SpQQPlot<- function (data, varname=NA, save=F)
 
 }
 
-#Usage samples
-# SpQQPlot(x, save=T)
-# SpQQPlot(x, varname="varname #1", save=T)
-# xqqplot <- SpQQPlot(XYData$X)
-# xsdqqplot <- SpQQPlot(XYData$Xsd)
-# yqqplot <- SpQQPlot(XYData$Y)
-# ysdqqplot <- SpQQPlot(XYData$Ysd)
