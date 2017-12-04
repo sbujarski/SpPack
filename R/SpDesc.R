@@ -1,7 +1,15 @@
-#Displays summary statistics
-#Uses pastecs stat.desc for numeric data
-#prints tables for factor data
-#can take a vector or dataframe
+#' Spencer Descriptives
+#'
+#' Computes summary descriptives and frequency tables
+#' Uses pastecs stat.desc for numeric data
+#' prints tables for factor data
+#' can take a vector or dataframe
+#' @param data dataframe to get descriptives/frequencies
+#' @keywords descriptives
+#' @export
+#' @examples
+#' SpDesc(XYData)
+#' SpDesc(XYData$X)
 
 library(pastecs)
 
