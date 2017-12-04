@@ -4,7 +4,7 @@ Title: Spencer's Personal Package
 Version: 0.1.0
 Author: Spencer Bujarski
 Maintainer: Spencer Bujarski <s.bujarski@gmail.com>
-Description: A series of self-written functions for the author. 
+Description: A series of self-written functions for the author 
 License: None
 Encoding: UTF-8
 LazyData: true
