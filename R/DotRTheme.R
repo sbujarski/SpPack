@@ -1,4 +1,18 @@
-#Data on the Rocks default theme
+#' Data on the Rocks Theme
+#'
+#' Default ggplot theme for Data on the Rocks blog posts
+#' @name DotRTheme
+#' @param axis.text.size axis text size (defaults to 16)
+#' @param axis.title.size axis title size (defaults to 16)
+#' @param title.size title size (degaults to 20)
+#' @param legend.position positions of the legend (defaults to none)
+#' @keywords plotting
+#' @export
+#' @examples
+#' Data <- data.frame(x=seq(1:10), y=rnorm(n=10))
+#' p <- ggplot(Data, aes(x=x, y=y))+ geom_point() +
+#'     DotRTheme()
+#' print(p)
 
 DotRTheme <- function(axis.text.size=16, axis.title.size=16, title.size=20, legend.position="none")
 {
