@@ -13,7 +13,9 @@ Prints tables for factor data. \cr
 Able to take a vector or dataframe.
 }
 \examples{
-SpDesc(XYData)
-SpDesc(XYData$X)
+Data <- data.frame(x=seq(1:10), y=rnorm(n=10), c=c(rep("A",7), rep("B",3)))
+SpDesc(Data)
+SpDesc(Data$x)
+SpDesc(Data$c)
 }
 \keyword{descriptives}

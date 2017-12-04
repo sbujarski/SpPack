@@ -9,8 +9,10 @@
 #' @keywords descriptives
 #' @export
 #' @examples
-#' SpDesc(XYData)
-#' SpDesc(XYData$X)
+#' Data <- data.frame(x=seq(1:10), y=rnorm(n=10), c=c(rep("A",7), rep("B",3)))
+#' SpDesc(Data)
+#' SpDesc(Data$x)
+#' SpDesc(Data$c)
 
 library(pastecs)
 
@@ -18,7 +20,7 @@ SpDesc <- function(data)
 {
   #If only 1 variable do separately
   if(dim(data.frame(data))[2]==1){
-    if(class(data)=="numeric"){#if R can compute a mean then stat.desc
+    if(class(data)=="numeric"||class(data)=="integer"){#if R can compute a mean then stat.desc
       print(t(stat.desc(data))[,-c(2,3,6,7,11,14)])
     }
     else{
