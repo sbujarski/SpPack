@@ -7,7 +7,7 @@
 #' @param y vector of y values
 #' @param ysd vector of ysd values (specifies the height of the elipse)
 #' @keywords plotting
-#' @export data.Ellipse dataframe containing ellipse datapoints
+#' @export
 #' @examples
 #' Data <- data.frame(x=seq(1:10), xsd=runif(10), y=rnorm(n=10), ysd=runif(10))
 #' Ellipse <- CompEllipse(x=Data$x, xsd=Data$xsd, y=Data$y, ysd=Data$ysd)
