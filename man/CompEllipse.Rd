@@ -15,6 +15,9 @@ CompEllipse(x, xsd, y, ysd)
 
 \item{ysd}{vector of ysd values (specifies the height of the elipse)}
 }
+\value{
+dataframe of Ellipse x-y points
+}
 \description{
 Computes the datapoints in order to plot uncertainty elipses \cr
 }
