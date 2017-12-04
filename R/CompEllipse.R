@@ -12,7 +12,7 @@
 #' Data <- data.frame(x=seq(1:10), xsd=runif(10), y=rnorm(n=10), ysd=runif(10))
 #' Ellipse <- CompEllipse(x=Data$x, xsd=Data$xsd, y=Data$y, ysd=Data$ysd)
 #' p <- ggplot()+
-#'     geom_point(data=Data, aes(x=X, y=Y))+
+#'     geom_point(data=Data, aes(x=x, y=y))+
 #'     geom_polygon(data=Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)
 #' print(p)
 
