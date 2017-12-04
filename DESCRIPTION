@@ -8,3 +8,4 @@ Description: A series of self-written functions for the author.
 License: None
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.0.1
