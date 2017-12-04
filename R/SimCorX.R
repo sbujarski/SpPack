@@ -9,7 +9,8 @@
 #' @keywords simulation
 #' @export
 #' @examples
-#' SimCorX(x, Ymean=1, Ysd=.5, rho=.5)
+#' x=rnorm(10)
+#' SimCorX(x, ymean=1, ysd=.5, rho=.5)
 
 
 SimCorX <- function (x, ymean, ysd, rho)
