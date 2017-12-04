@@ -14,8 +14,6 @@
 #' @examples
 #' SimCor(n=20, xmean=10, xsd=5, ymean=1, ysd=.5, rho=.5)
 
-#Simulates bivariate correlation of specified n, means, sd, and rho
-
 SimCor <- function (n, xmean, xsd, ymean, ysd, rho)
 {
   xnorm <- rnorm(n,0,1)
