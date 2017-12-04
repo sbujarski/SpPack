@@ -1,9 +1,6 @@
 #' Spencer Descriptives
 #'
-#' Computes summary descriptives and frequency tables
-#' Uses pastecs stat.desc for numeric data
-#' prints tables for factor data
-#' can take a vector or dataframe
+#' Computes summary descriptives and frequency tables\n Uses pastecs stat.desc for numeric data \n prints tables for factor data \n can take a vector or dataframe
 #' @param data dataframe to get descriptives/frequencies
 #' @keywords descriptives
 #' @export
