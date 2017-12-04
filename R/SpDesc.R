@@ -7,7 +7,7 @@ library(pastecs)
 
 SpDesc <- function(data)
 {
-  #If only 1 variable do separately 
+  #If only 1 variable do separately
   if(dim(data.frame(data))[2]==1){
     if(class(data)=="numeric"){#if R can compute a mean then stat.desc
       print(t(stat.desc(data))[,-c(2,3,6,7,11,14)])
@@ -18,11 +18,11 @@ SpDesc <- function(data)
     }
     return(noquote(""))
   }
-  
+
   #separate categorical from numerical data
   data.num <- data.frame(Dummy=rep(NA,dim(data)[1])) #Make a dummy data.frame
   data.cat <- data.frame(Dummy=rep(NA,dim(data)[1]))
-  
+
   for(i in 1:dim(data)[2]){
     if(!is.na(stat.desc(data[i])["mean",])){#if R can compute a mean then add to data.num
       data.num <- cbind(data.num, data[i])
@@ -34,13 +34,13 @@ SpDesc <- function(data)
   #Delete dummy variable
   data.num$Dummy <- NULL
   data.cat$Dummy <- NULL
-  
+
   #Print Numerical results
   if(dim(data.num)[2]>0) {
     print(t(stat.desc(data.num))[,-c(2,3,6,7,11,14)])
     cat(noquote(""), sep="\n\n")
   }
-  
+
   #Print categorical results
   if(dim(data.cat)[2]>0) {
     for(j in 1:dim(data.cat)[2]){
@@ -50,7 +50,7 @@ SpDesc <- function(data)
   }
 }
 
-#Usage examples----
+#Usage examples
 # SpDesc(XYData)
 # SpDesc(XYData$X)
 # x3=c("A","A","B")
