@@ -23,6 +23,6 @@ SimCorX <- function (x, ymean, ysd, rho)
 
   y <- ycor*ysd+ymean
 
-  return (data.frame(x,x))
+  return (data.frame(x,y))
 }
 
