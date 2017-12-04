@@ -13,6 +13,9 @@
 #' p2 <- ggplot(Data, aes(x=x2, y=y2)) + geom_point() + SpTheme()
 #' multiplot(p1, p2, cols=2)
 
+library(ggplot)
+library(grid)
+
 multiplot <- function(..., plotlist=NULL, cols=1, layout=NULL) {
 
   # Make a list from the ... arguments and plotlist
