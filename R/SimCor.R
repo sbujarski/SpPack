@@ -3,18 +3,16 @@
 #' Simulates bivariate correlation of specified n, means, sd, and rho
 #' @name SimCor
 #' @param n number of datapoints to simulate
-#' @param n number fo datapoints to simulate
-#' @param n number fo datapoints to simulate
-#' @param n number fo datapoints to simulate
-
-#' @return dataframe adding adjustment factors and inflation adjusted values
-#' @keywords inflation
+#' @param xmean mean of x variable
+#' @param xsd standard deviation of x variable
+#' @param ymean mean of y variable
+#' @param ysd standard deviation of y variable
+#' @param rho intended correlation
+#' @return dataframe of correlated x and y variables
+#' @keywords simulation
 #' @export
 #' @examples
-#' InfAdj(yr=1990, adj.yr=2013, value=1)
-#' Dollars <- data.frame(yr=seq(1990,2010), value=1)
-#' InfAdj(yr=Dollars$yr, adj.yr=2013, value=Dollars$value)
-
+#' SimCor(n=20, xmean=10, xsd=5, ymean=1, ysd=.5, rho=.5)
 
 #Simulates bivariate correlation of specified n, means, sd, and rho
 
@@ -30,6 +28,3 @@ SimCor <- function (n, xmean, xsd, ymean, ysd, rho)
 
   return (data.frame(x,y))
 }
-
-#Usage Examples
-# SimCor(n=20, Xmean=10, Xsd=5, Ymean=1, Ysd=.5, rho=.5)
