@@ -17,7 +17,7 @@
 InfAdj <- function(yr, adj.yr, value)
 {
   #import yearly CPI data
-  yearly_cpi <- read.csv("C:/Users/sbuja/Documents/Statistics Misc/Yearly_CPIAUCSL.csv", header = TRUE)
+  yearly_cpi <- read.csv("yearly_cpi.csv", header = TRUE)
 
 
   #if the adjusting for inflation is a scalar
