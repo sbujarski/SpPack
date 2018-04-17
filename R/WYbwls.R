@@ -118,7 +118,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
   sigb <- sqrt(sigbsq)
   sigasq <- 1/(sum(W)) + meanx^2*(sigbsq)
   siga <- sqrt(sigasq)
-  S <- sum(W*((Y - b*x - a))^2)
+  S <- sum(W*((y - b*x - a))^2)
   wr = sum(U*V)/sqrt((sum(U2)*sum(V2)))
 
   #MLE p-value
