@@ -18,7 +18,7 @@ library(ggplot2)
 
 SpHist <- function(data, variable=NA, bins=30, save=F)
 {
-  if(class(data)=="data.frame"){
+  if("data.frame" %in% class(data)){
     data<-data[variable]
     data<-na.exclude(data)
     Mean<-mean(data[,1])
