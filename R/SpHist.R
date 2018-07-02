@@ -19,7 +19,7 @@ library(ggplot2)
 SpHist <- function(data, variable=NA, bins=30, save=F)
 {
   if("data.frame" %in% class(data)){
-    data<-data[variable]
+    data<-as.data.frame(data[variable])
     data<-na.omit(data)
     Mean<-mean(data[,1])
     SD<-sd(data[,1])
