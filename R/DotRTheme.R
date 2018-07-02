@@ -21,5 +21,6 @@ DotRTheme <- function(axis.text.size=16, axis.title.size=16, title.size=20, lege
         axis.title.x=element_text(colour = "black", size=axis.title.size), axis.title.y=element_text(colour = "black", size=axis.title.size),
         axis.text.x=element_text(colour = "black", size=axis.text.size), axis.text.y=element_text(colour = "black", size=axis.text.size),
         plot.title=element_text(colour = "black",size=title.size, face="bold", hjust=.5),
-        axis.ticks=element_line(colour="black"), legend.position = legend.position, legend.key=element_blank())
+        axis.ticks=element_line(colour="black"), legend.position = legend.position, legend.key=element_blank(),
+        legend.title = element_text(size=14), legend.text = element_text(size=12))
 }
