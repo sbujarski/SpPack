@@ -20,7 +20,7 @@ SpHist <- function(data, variable=NA, bins=30, save=F)
 {
   if("data.frame" %in% class(data)){
     data<-data[variable]
-    data<-na.exclude(data)
+    data<-na.omit(data)
     Mean<-mean(data[,1])
     SD<-sd(data[,1])
 
@@ -31,7 +31,7 @@ SpHist <- function(data, variable=NA, bins=30, save=F)
     if(class(data)=="numeric"){
       variable<-deparse(substitute(data))
       data<-as.data.frame(data, col.names=T)
-      data<-na.exclude(data)
+      data<-na.omit(data)
       Mean<-mean(data[,1])
       SD<-sd(data[,1])
 
