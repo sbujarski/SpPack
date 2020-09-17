@@ -21,13 +21,11 @@
 #'
 #' WYtest <- WYbwls(x=XYData$X, xsd=XYData$Xsd, y=XYData$Y, ysd=XYData$Ysd, print=T, plot=T)
 
-WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
-{
+WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols = T){
   #Error Checking
   {
     #make sure the data is of identical length
-    if(!(length(x)==length(xsd)&&length(xsd)==length(y)&&length(y)==length(ysd)))
-    {
+    if(!(length(x)==length(xsd)&&length(xsd)==length(y)&&length(y)==length(ysd))){
       print ("Error\nData columns are not of the same length")
       return(NA)
     }
@@ -35,26 +33,22 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
     #check to make sure missing data is paired in x and y
     x.NA <- which(is.na(x))
     xsd.NA <- which(is.na(xsd))
-    if(!(length(x.NA)==length(xsd.NA)))
-    {
+    if(!(length(x.NA)==length(xsd.NA))){
       print("x values differ in amount of missingness")
       return(NA)
     }
-    if(!(all.equal(x.NA,xsd.NA)))
-    {
+    if(!(all.equal(x.NA,xsd.NA))){
       print ("Error\nMissingness in x is not paired correctly")
       return(NA)
     }
 
     y.NA <- which(is.na(y))
     ysd.NA <- which(is.na(ysd))
-    if(!(length(y.NA)==length(ysd.NA)))
-    {
+    if(!(length(y.NA)==length(ysd.NA))){
       print("y values differ in amount of missingness")
       return(NA)
     }
-    if(!(all.equal(y.NA,ysd.NA)))
-    {
+    if(!(all.equal(y.NA,ysd.NA))){
       print ("Error\nMissingness in y is not paired correctly")
       return(NA)
     }
@@ -63,12 +57,13 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
   #OLS correlation
   r<-cor(x,y)
   n<-length(x)
-
+  
   OLSLM <- lm(y~x)
-  if(print)
-  {
-    print("OLS Regression Results")
-    print(summary(OLSLM))
+  if(ols){
+    if(print){
+      print("OLS Regression Results")
+      print(summary(OLSLM))
+    }
   }
 
 
@@ -99,8 +94,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
     dif <- b - b2
     d <- abs(dif)
     if(print){print(noquote(paste("iteration: ",i,"     d: ",d)))}
-    if (i > 10000)
-    {
+    if (i > 10000){
       return(list(WY.Summary=NA, OLSLM=NA,
                   WY.Int=NA,WY.Int.SE=NA,
                   WY.Slope=NA, WY.Slope.SE=NA,
@@ -114,59 +108,72 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8)
   X <- meanx + Beta
   meanx <- sum(W*X)/sum(W)
   u <- X - meanx
-  sigbsq <- 1/(sum(W*(u*u)))
-  sigb <- sqrt(sigbsq)
-  sigasq <- 1/(sum(W)) + meanx^2*(sigbsq)
-  siga <- sqrt(sigasq)
+  
   S <- sum(W*((y - b*x - a))^2)
   wr = sum(U*V)/sqrt((sum(U2)*sum(V2)))
+  
+  sigbsq <- 1/(sum(W*(u*u)))
+  sigasq <- 1/(sum(W)) + meanx^2*(sigbsq)
+  
+  if(gof.adj){
+    sigb <- sqrt(sigbsq*S/(n-2))
+    siga <- sqrt(sigasq*S/(n-2))    
+  } else {
+    sigb <- sqrt(sigbsq)  
+    siga <- sqrt(sigasq)
+  }
+  
 
-  #MLE p-value
-  B <- 0
-  t<-(b-B)/sigb
-  Pval<-2*pt(-abs(t),df=n-2)
-
-
-  #print WY Results
-  WY.Summary<- c("\n", "Williamson-York Algorithm for Bivariate Weighted Least Squared", "\n", "\n",
-                 "Coefficients:","\n",
-                 "     ","\t","Est ","\t", "  SE","\n",
-                 "Int  ","\t",round(a, digits=3),"\t",round(siga, digits=3), "\n",
-                 "Slope","\t",round(b, digits=4),"\t",round(sigb, digits=3),"\n\n",
-                 "r:  ","\t",round(wr,digits=4),"\n",
-                 "r^2:","\t",round(wr^2,digits=4),"\n",
-                 "p:  ","\t",Pval, "\n\n")
-  if(print)
-  {
-    cat(WY.Summary)
+  WYcoefficients <- data.frame(parameter = c("Intercept", "Slope"), coefficient = c(a, b), se = c(siga, sigb), t = c(a,b)/c(siga, sigb), p = 2*pt(-abs(c(a,b)/c(siga, sigb)),df=n-2))
+  
+  if(print){
+    cat("\nWilliamson-York Algorithm for Bivariate Weighted Least Squared\n")
+    if(gof.adj){cat("Goodness of Fit SE Adjusted\n\n")}
+    print(WYcoefficients)    
+    cat("\n")
+    cat("WY correlation = ", wr, "\n\n")
   }
 
 
   #Generate Figure (if requested)
   Fig<-NULL
-  if(plot)
-  {
+  if(plot){
     xydata <- data.frame(x=x, xsd=xsd, y=y, ysd=ysd)
+    Data.Ellipse <- CompEllipse(x=xydata$x, xsd=xydata$xsd, y=xydata$y, ysd=xydata$ysd)
     xydata$meanSD <- (xydata$xsd+xydata$ysd)/2
     xydata$Wsize <- 1/(xydata$meanSD^2)
-    WYline<-data.frame(x=c(min(x),max(x)))
+    WYline<-data.frame(x=c(min(Data.Ellipse$xEll),max(Data.Ellipse$xEll)))
     WYline$WY.y<-a+b*WYline$x
-    Data.Ellipse <- CompEllipse(x=xydata$x, xsd=xydata$xsd, y=xydata$y, ysd=xydata$ysd)
-
-    Fig <- ggplot()+
-      geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
-      scale_size_continuous(range = c(2,7))+
-      geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
-      geom_smooth(data=xydata, method="lm",aes(x=x, y=y, linetype="OLS"), se=F, size=1, colour="black")+
-      geom_line(data=WYline, aes(x=x,y=WY.y, linetype="Williamson-York"), colour="black", size=1)+
-      scale_linetype_manual("Analysis Type", values = c("dashed", "solid"))+
-      SpTheme() + theme(legend.position = c(0.8,0.15), legend.key.width=unit(2,"line"))
-    print(Fig)
+    
+    
+    if(ols){
+      Fig <- ggplot()+
+        geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
+        scale_size_continuous(range = c(2,7))+
+        geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
+        geom_smooth(data=xydata, method="lm", formula = 'y ~ x', aes(x=x, y=y, linetype="OLS"), se=F, size=1, colour="black")+
+        geom_line(data=WYline, aes(x=x,y=WY.y, linetype="Williamson-York"), colour="black", size=1)+
+        scale_linetype_manual("Analysis Type", values = c("dashed", "solid"))+
+        SpTheme() + theme(legend.position = "right", legend.key.width=unit(2,"line"))
+      print(Fig)
+    } else {
+      Fig <- ggplot()+
+        geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
+        scale_size_continuous(range = c(2,7))+
+        geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
+        geom_line(data=WYline, aes(x=x,y=WY.y), colour="black", size=1)+
+        SpTheme()
+      print(Fig)  
+    }
+    
   }
 
-  return(list(WY.Summary=WY.Summary, OLSLM=OLSLM,
+  return(list(WYcoefficients=WYcoefficients, OLSLM=OLSLM,
               WY.Int=a,WY.Int.SE=siga,
               WY.Slope=b, WY.Slope.SE=sigb,
-              r=wr, r2=wr^2, p=Pval, plot=Fig))
+              r=wr, plot=Fig))
 }
+
+
+
 
