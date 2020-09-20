@@ -21,7 +21,7 @@
 #'
 #' WYtest <- WYbwls(x=XYData$X, xsd=XYData$Xsd, y=XYData$Y, ysd=XYData$Ysd, print=T, plot=T)
 
-WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols = T){
+WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols = T, error.band = T){
   #Error Checking
   {
     #make sure the data is of identical length
@@ -150,8 +150,6 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
     WYline$y<-a+b*WYline$x
     WYline$e <- sqrt(siga^2 + 2*WYline$x*cov.ab + (sigb*WYline$x)^2)
     
-    print(WYline)
-    
     if(ols){
       Fig <- ggplot()+
         geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
@@ -163,18 +161,28 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
         SpTheme() + theme(legend.position = "right", legend.key.width=unit(2,"line"))
       print(Fig)
     } else {
-      Fig <- ggplot()+
-        geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
-        scale_size_continuous(range = c(2,7))+
-        geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
-        geom_ribbon(data=WYline, aes(x=x, ymin = y-e, ymax = y+e), fill = "blue", alpha = 0.2) + 
-        geom_line(data=WYline, aes(x=x,y=y), colour="blue", size=1)+
-        SpTheme()
-      print(Fig)  
+      if(error.band){
+        Fig <- ggplot()+
+          geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
+          scale_size_continuous(range = c(2,7))+
+          geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
+          geom_ribbon(data=WYline, aes(x=x, ymin = y-e, ymax = y+e), fill = "blue", alpha = 0.2) + 
+          geom_line(data=WYline, aes(x=x,y=y), colour="blue", size=1)+
+          SpTheme()
+        print(Fig)    
+      } else {
+        Fig <- ggplot()+
+          geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
+          scale_size_continuous(range = c(2,7))+
+          geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
+          geom_line(data=WYline, aes(x=x,y=y), colour="blue", size=1)+
+          SpTheme()
+        print(Fig)  
+      }
     }
-    
   }
-
+  
+    
   return(list(WYcoefficients=WYcoefficients, OLSLM=OLSLM,
               WY.Int=a,WY.Int.SE=siga,
               WY.Slope=b, WY.Slope.SE=sigb,
