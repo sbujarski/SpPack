@@ -123,6 +123,7 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
     siga <- sqrt(sigasq)
   }
   
+  cov.ab <- -meanx * sigb^2
 
   WYcoefficients <- data.frame(parameter = c("Intercept", "Slope"), coefficient = c(a, b), se = c(siga, sigb), t = c(a,b)/c(siga, sigb), p = 2*pt(-abs(c(a,b)/c(siga, sigb)),df=n-2))
   
@@ -142,9 +143,14 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
     Data.Ellipse <- CompEllipse(x=xydata$x, xsd=xydata$xsd, y=xydata$y, ysd=xydata$ysd)
     xydata$meanSD <- (xydata$xsd+xydata$ysd)/2
     xydata$Wsize <- 1/(xydata$meanSD^2)
-    WYline<-data.frame(x=c(min(Data.Ellipse$xEll),max(Data.Ellipse$xEll)))
-    WYline$WY.y<-a+b*WYline$x
     
+    # WYline<-data.frame(x=c(min(Data.Ellipse$xEll),max(Data.Ellipse$xEll)))
+    # WYline$WY.y<-a+b*WYline$x
+    WYline <- data.frame(x=seq(min(Data.Ellipse$xEll), max(Data.Ellipse$xEll), length.out = 100))
+    WYline$y<-a+b*WYline$x
+    WYline$e <- sqrt(siga^2 + 2*WYline$x*cov.ab + (sigb*WYline$x)^2)
+    
+    print(WYline)
     
     if(ols){
       Fig <- ggplot()+
@@ -161,7 +167,8 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
         geom_point(data=xydata, aes(x=x, y=y, size=Wsize), show.legend=F)+
         scale_size_continuous(range = c(2,7))+
         geom_polygon(data=Data.Ellipse,aes(x=xEll,y=yEll, group=obs), alpha=.15)+
-        geom_line(data=WYline, aes(x=x,y=WY.y), colour="black", size=1)+
+        geom_ribbon(data=WYline, aes(x=x, ymin = y-e, ymax = y+e), fill = "blue", alpha = 0.2) + 
+        geom_line(data=WYline, aes(x=x,y=y), colour="blue", size=1)+
         SpTheme()
       print(Fig)  
     }
@@ -171,9 +178,5 @@ WYbwls <- function (x, xsd, y, ysd, print=T, plot=T, tol=1e-8, gof.adj = T, ols 
   return(list(WYcoefficients=WYcoefficients, OLSLM=OLSLM,
               WY.Int=a,WY.Int.SE=siga,
               WY.Slope=b, WY.Slope.SE=sigb,
-              r=wr, plot=Fig))
+              r=wr, cov.ab=cov.ab, plot=Fig))
 }
-
-
-
-
